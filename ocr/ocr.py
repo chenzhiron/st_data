@@ -15,15 +15,26 @@ ocr = PaddleOCR(lang="ch",
                 rec_model_dir=ocr_rec,
                 cls_model_dir=ocr_cls,
                 rec_char_dict_path=ocr_keys,
-                show_log=True,
+                show_log=False,
                 )
 
 
-def ocrDefault(sources):
+def ocr_default(sources):
     result = ocr.ocr(sources, cls=False, inv=True)
     return result
 
-    # for idx in range(len(result)):
-    #     res = result[idx]
-    #     for line in res:
-    #         print(line)
+def ocr_format_val(sources):
+    v = ocr_default(sources)
+    if v[0]== None:
+        return None
+    try:
+        result = ""
+        for outer_list in v:
+            for inner_list in outer_list:
+                for element in inner_list:
+                    if isinstance(element, tuple):
+                        result += element[0]
+        print(result)
+        return result
+    except:
+        return None
